@@ -1,78 +1,95 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
+
+public class CustomeComponent : MonoBehaviour
+{
+    public bool isCollide = false;
+}
 
 public class EnemySpawner : MonoBehaviour
 {
     public GameObject enemyCube;
     public GameObject enemyCapsule;
+    public GameObject enemies;
+    public TMP_Text text;
+    public Button startBtn;
+    public Button restartBtn;
+    public Button nextRoundBtn;
+    public GameObject startGamePanel;
+    public static EnemySpawner instance;
+    public static int currentRound = 1;
     public float enemySpeed;
-    public static int trigger1 = 0;
-    public static int trigger2 = 0;
     public static bool defeat;
-    public static bool isCollideCube;
-    public static bool isCollideCapsule;
-    private Queue<IEnumerator> coroutineQueue = new Queue<IEnumerator>();
+
+    public Queue<IEnumerator> coroutineQueue = new Queue<IEnumerator>();
+
+    private void Start()
+    {
+        instance = this;
+    }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            defeat = false;
 
-            for (int i = 0; i < 4; i++)
-            {
-                coroutineQueue.Enqueue(CoroutineSpawnCube(enemySpeed, enemyCube));
-                coroutineQueue.Enqueue(CoroutineSpawnCapsule(enemySpeed * 1.5f));
-            }
-
-            StartCoroutine(DeQueue(1f));
-        }
     }
 
+    public void LoseRound()
+    {
+        StopAllCoroutines();
+        coroutineQueue.Clear();
+        Debug.Log(coroutineQueue.Count);
+        text.text = "Lose";
+        text.color = Color.red;
+        restartBtn.gameObject.SetActive(true);
+        text.gameObject.SetActive(true);
+        startGamePanel.gameObject.SetActive(true);
+    }
+
+    public void WinRound()
+    {
+        text.text = "Victory";
+        text.color = Color.green;
+        nextRoundBtn.gameObject.SetActive(true);
+        text.gameObject.SetActive(true);
+        startGamePanel.gameObject.SetActive(true);
+    }
 
     // Виконати корутини в черзі
-    private IEnumerator DeQueue(float period)
+    private IEnumerator CoroutineDeQueue(float period, int round)
     {
+        yield return new WaitForSeconds(1f);
         while (coroutineQueue.Count > 0 && defeat == false)
         {
-            StartCoroutine(coroutineQueue.Dequeue());
-            yield return new WaitForSeconds(1f);
+            if (round > 1)
+            {
+                StartCoroutine(coroutineQueue.Dequeue());
+                yield return new WaitForSeconds(period);
+            }
             yield return StartCoroutine(coroutineQueue.Dequeue());
         }
+
+        WinRound();
     }
 
-   
-    
-   private IEnumerator CoroutineSpawnCube(float speed, GameObject prefab)
-   {
-        GameObject enemy = Instantiate(prefab, RanPos(), RanRot());
-        Vector3 target = new Vector3(Random.Range(1.5f, 8.5f), Random.Range(0.9f, 3f), -14.2f);
-
-        while (trigger1 == 0)
-        {
-            enemy.transform.position = Vector3.MoveTowards(enemy.transform.position, target, Time.deltaTime * speed);
-
-            yield return null;
-        }
-
-        trigger1 = 0;
-   }
-
-    private IEnumerator CoroutineSpawnCapsule(float speed)
+    private IEnumerator CoroutineSpawnEnemy(float speed, GameObject prefab, GameObject parent)
     {
-        GameObject enemy = Instantiate(enemyCapsule, RanPos(), RanRot());
+        GameObject enemy = Instantiate(prefab, RanPos(), RanRot(), parent.transform);
+        enemy.AddComponent<CustomeComponent>();
+
         Vector3 target = new Vector3(Random.Range(1.5f, 8.5f), Random.Range(0.9f, 3f), -14.2f);
 
-        while (trigger2 == 0)
+        while (enemy.GetComponent<CustomeComponent>().isCollide == false)
         {
             enemy.transform.position = Vector3.MoveTowards(enemy.transform.position, target, Time.deltaTime * speed);
 
             yield return null;
         }
 
-        trigger2 = 0;
+        if (defeat)
+            LoseRound();
     }
 
     private Vector3 RanPos()
@@ -85,111 +102,64 @@ public class EnemySpawner : MonoBehaviour
         return Quaternion.Euler(Random.Range(0f, 100f), Random.Range(0f, 100f), Random.Range(0f, 100f));
     }
 
-
-    /*
-        private IEnumerator CoroutineSample()
+    public void StartRound()
     {
-        int x, z;
-
-        yield return new WaitForSeconds(2f);
-        GameObject enemy = Instantiate(cube, RanPos(), RanRot());
-
-        if (enemy.transform.position.x > 5)
-            x = -400;
-        else
-            x = 400;
-
-        if (enemy.transform.position.z < -4)
-            z = 400;
-        else
-            z = -400;
-
-        yield return new WaitForSeconds(2f);
-
-        enemy.GetComponent<Rigidbody>().AddForce(new Vector3(x, 0, z));
+        switch (currentRound)
+        {
+            case 1:
+                Round1();
+                break;
+            case 2:
+                Round2();
+                break;
+            case 3:
+                Round1();
+                break;
+        }
     }
-   */
 
-    /*
-    private IEnumerator CoroutineS1()
+    public void Round1()
     {
-        GameObject enemy = Instantiate(cube, RanPos(), RanRot());
+        GameObject enemiesParent = Instantiate(enemies, Vector3.zero, Quaternion.identity);
 
-        yield return new WaitForSeconds(2f);
+        defeat = false;
 
-        enemy.GetComponent<Rigidbody>().AddForce(new Vector3(-500, 0, -500));
+        for (int i = 0; i < 4; i++)
+        {
+            coroutineQueue.Enqueue(CoroutineSpawnEnemy(enemySpeed, enemyCube, enemiesParent));
+        }
 
-        //while (enemy.transform.position.x > 5 && enemy.transform.position.z > -4)
-        //{
-        //    Debug.Log(enemy.transform.position.x + " " + enemy.transform.position.z);
-        //    yield return null;
-        //}
-
-        //yield return new WaitUntil(() => enemy.transform.position.x < 5 || enemy.transform.position.z < -4); 
-
-        Destroy(enemy.gameObject);
+        StartCoroutine(CoroutineDeQueue(1f, 1));
     }
-    */
 
-    /*
-    private IEnumerator Lerp()
+    public void Round2()
     {
-        float t = 0.5f;
+        GameObject enemiesParent = Instantiate(enemies, Vector3.zero, Quaternion.identity);
 
-        Mathf.Lerp(42, 90, t);
-        Vector3.Lerp(transform.position, Vector2.zero, t);
+        defeat = false;
 
-        Quaternion.Lerp(transform.rotation, Quaternion.identity, t);
-        Quaternion.Slerp(transform.rotation, Quaternion.identity, t);
+        for (int i = 0; i < 4; i++)
+        {
+            coroutineQueue.Enqueue(CoroutineSpawnEnemy(enemySpeed, enemyCube, enemiesParent));
+            coroutineQueue.Enqueue(CoroutineSpawnEnemy(enemySpeed * 1.5f, enemyCapsule, enemiesParent));
+        }
 
-        Color.Lerp(Color.cyan, Color.magenta, t);
-
-        GetComponent<MeshRenderer>().sharedMaterial.Lerp(Mat1, Mat2, t);
-
-        yield break;
+        StartCoroutine(CoroutineDeQueue(1f, 2));
     }
-    */
 
-    /*
-   private IEnumerator CoroutineS3()
+    public void Round3()
     {
-        GameObject enemy = Instantiate(cube, RanPos(), RanRot());
+        GameObject enemiesParent = Instantiate(enemies, Vector3.zero, Quaternion.identity);
 
-        yield return StartCoroutine(Utils.MoveToTarget(enemy.transform, new Vector3(1f, 0.55f, -10f)));
+        defeat = false;
 
-        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space));
+        for (int i = 0; i < 4; i++)
+        {
+            coroutineQueue.Enqueue(CoroutineSpawnEnemy(enemySpeed * 1.3f, enemyCube, enemiesParent));
+            coroutineQueue.Enqueue(CoroutineSpawnEnemy(enemySpeed * 1.3f, enemyCapsule, enemiesParent));
+        }
 
-        yield return StartCoroutine(Utils.MoveToTarget(enemy.transform, new Vector3(5f, 0.55f, -2f)));
-
-        yield return new WaitForSeconds(1);
-
-        enemy.GetComponent<Rigidbody>().AddForce(new Vector3(-200, 0, -200));
-
-        yield return new WaitForSeconds(2);
-
-        Debug.Log("Over");
+        StartCoroutine(CoroutineDeQueue(0f, 3));
     }
-    */
 
-    /*
-   private IEnumerator CoroutineS4()
-    {
-        AsyncOperation op = Resources.LoadAsync<Sprite>("big_image.png");
-        yield return op;
-
-        yield return new WaitForKeyDown(KeyCode.Delete);
-    }
-    */
-
-    /*
-      private IEnumerator MoveToTarget(Transform obj, Vector3 target)
-   {
-       while(obj.position != target)
-       {
-           obj.position = Vector3.MoveTowards(obj.position, target, Time.deltaTime * 5);
-           yield return null;
-       }
-       Destroy(obj.gameObject);
-   }
-   */
 }
