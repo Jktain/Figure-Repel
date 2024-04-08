@@ -10,9 +10,13 @@ To run this game - unzip "Figure Repel.rar" and run "Figure Repel.exe"
 
 ## Сontrol
 W / Upper arrow - forward
+
 A / Left arrow - left
+
 S / Down arrow - back
+
 D / Right arrow - right
+
 Space - jump
 
 ## Resize window keys
