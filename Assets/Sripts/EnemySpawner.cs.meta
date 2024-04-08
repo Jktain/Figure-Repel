@@ -3,7 +3,15 @@ guid: dceba73f767fedc459ec1603fc2de802
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - enemyCube: {instanceID: 0}
+  - startGamePanel: {instanceID: 0}
+  - enemyCapsule: {fileID: 2702393939153899957, guid: 04a493c8988caaa4eb647f952ed68181, type: 3}
+  - player: {instanceID: 0}
+  - text: {instanceID: 0}
+  - startBtn: {instanceID: 0}
+  - restartBtn: {instanceID: 0}
+  - nextRoundBtn: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -8,14 +8,11 @@ public class Enemy : MonoBehaviour
         {
             Debug.Log(gameObject.GetComponent<CustomeComponent>().isCollide = true);
             EnemySpawner.defeat = true;
-            Destroy(gameObject, 1f);
-            GetComponent<Rigidbody>().velocity = Vector3.zero;
         }
         else
         if (collision.gameObject.tag == "Player")
         {
             Debug.Log(gameObject.GetComponent<CustomeComponent>().isCollide = true);
-            Destroy(gameObject, 1f);
         }
     }
 }

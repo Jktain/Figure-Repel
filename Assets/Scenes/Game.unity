@@ -550,9 +550,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1021453177}
-        m_TargetAssemblyTypeName: EnemySpawner, Assembly-CSharp
-        m_MethodName: Round1
+      - m_Target: {fileID: 2098102906}
+        m_TargetAssemblyTypeName: BtnsClick, Assembly-CSharp
+        m_MethodName: NextRound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -562,9 +562,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 2098102906}
-        m_TargetAssemblyTypeName: BtnsClick, Assembly-CSharp
-        m_MethodName: NextRound
+      - m_Target: {fileID: 1021453177}
+        m_TargetAssemblyTypeName: EnemySpawner, Assembly-CSharp
+        m_MethodName: StartRound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1026,9 +1026,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1021453177}
-        m_TargetAssemblyTypeName: EnemySpawner, Assembly-CSharp
-        m_MethodName: Round1
+      - m_Target: {fileID: 2098102906}
+        m_TargetAssemblyTypeName: BtnsClick, Assembly-CSharp
+        m_MethodName: RestartRound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1038,9 +1038,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 2098102906}
-        m_TargetAssemblyTypeName: BtnsClick, Assembly-CSharp
-        m_MethodName: RestartRound
+      - m_Target: {fileID: 1021453177}
+        m_TargetAssemblyTypeName: EnemySpawner, Assembly-CSharp
+        m_MethodName: StartRound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1224,7 +1224,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyCube: {fileID: 3235748330774571785, guid: 44ae610024783e5429a950d712964340, type: 3}
   enemyCapsule: {fileID: 2702393939153899957, guid: 04a493c8988caaa4eb647f952ed68181, type: 3}
-  enemies: {fileID: 1118982872892281988, guid: a0dff67649c12f94987e343d74a5bc84, type: 3}
+  text: {fileID: 1571352131}
+  startBtn: {fileID: 1881673431}
+  restartBtn: {fileID: 520796142}
+  nextRoundBtn: {fileID: 284762891}
+  startGamePanel: {fileID: 1725510127}
   enemySpeed: 8
 --- !u!4 &1021453178
 Transform:
@@ -1563,7 +1567,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Defeat
+  m_text: Lose
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1824,7 +1828,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1725510128
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2074,7 +2078,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1881673430
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2153,7 +2157,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 2098102906}
         m_TargetAssemblyTypeName: BtnsClick, Assembly-CSharp
-        m_MethodName: StartRound
+        m_MethodName: FirstRound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

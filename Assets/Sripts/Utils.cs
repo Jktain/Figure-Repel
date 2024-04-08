@@ -1,52 +1,41 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 
 
 public class Utils
 {
-
-
-
-    
-   //public static IEnumerator MoveToTarget()
-   // {
-   //     GameObject enemy = Instantiate(enemyCube, RanPos(), RanRot());
-        
-   //     Vector3 target = new Vector3(Random.Range(1.5f, 8.5f), Random.Range(0.9f, 3f), -14.2f);
-
-   //     while (isCollide)
-   //     {
-   //         enemy.transform.position = Vector3.MoveTowards(enemy.transform.position, target, Time.deltaTime * speed);
-
-   //         yield return null;
-   //     }
-
-   //     trigger1 = 0;
-   // }
-
-    
-
-    
-
-
-
-    /*
-   public static IEnumerator MoveToTarget(Transform obj, Vector3 target)
+    public static void LoseRound(TMP_Text text, Button restartBtn, GameObject startGamePanel, GameObject player)
     {
-        Vector3 startPos = obj.position;
-        float t = 0;
-
-        const float animationDuration = 1.5f;
-
-        while (t < 1)
-        {
-            obj.position = Vector3.Lerp(startPos, target, t);
-            t += Time.deltaTime/animationDuration;
-            yield return null;
-        }
+        EnemySpawner.coroutineQueue.Clear();
+        Debug.Log(EnemySpawner.coroutineQueue.Count);
+        text.text = "Lose";
+        text.color = Color.red;
+        restartBtn.gameObject.SetActive(true);
+        text.gameObject.SetActive(true);
+        player.gameObject.SetActive(false);
+        startGamePanel.gameObject.SetActive(true);
     }
-    */
+
+    public static void WinRound(TMP_Text text, Button nextRoundBtn, GameObject startGamePanel, GameObject player, Button restartBtn)
+    {
+        text.color = Color.green;
+        startGamePanel.gameObject.SetActive(true);
+        player.gameObject.SetActive(false);
+        if(EnemySpawner.currentRound < 3)
+        {
+            text.text = "Victory";
+            nextRoundBtn.gameObject.SetActive(true);
+            text.fontSize = 34;
+        }
+        else
+        {
+            restartBtn.gameObject.SetActive(true);
+            text.text = "You won the last round";
+        }
+        text.gameObject.SetActive(true);
+    }
+
 }
 
