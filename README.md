@@ -21,5 +21,6 @@ Space - jump
 
 ## Resize window keys
 2 - open game in full screen
+
 Escape - open game in window
 
