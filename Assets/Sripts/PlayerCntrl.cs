@@ -1,17 +1,9 @@
-using UnityEngine.UI;
 using UnityEngine;
 
 public class PlayerCntrl : MonoBehaviour
 {
 
     public float speed;
-    private Rigidbody rb;
-    public Text Score;
-
-    //private void Awake()
-    //{
-    //    rb = GetComponent<Rigidbody>();
-    //}
 
     private void FixedUpdate()
     {
@@ -20,6 +12,8 @@ public class PlayerCntrl : MonoBehaviour
         float z = Input.GetAxis("Jump");
 
         GetComponent<Rigidbody>().velocity = transform.TransformDirection(new Vector3(h, z, v) * speed * Time.fixedDeltaTime);
+
+        // Increasing gravity to make player fall quicklier
         Physics.gravity = new Vector3(0, -9.81f * 15, 0);
     }
 }

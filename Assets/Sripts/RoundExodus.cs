@@ -4,7 +4,7 @@ using TMPro;
 
 
 
-public class Utils
+public class RoundExodus
 {
     public static void LoseRound(TMP_Text text, Button restartBtn, GameObject startGamePanel, GameObject player)
     {

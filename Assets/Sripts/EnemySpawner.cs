@@ -4,31 +4,31 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class CustomeComponent : MonoBehaviour
-{
-    public bool isCollide = false;
-}
-
 public class EnemySpawner : MonoBehaviour
 {
-    public GameObject enemyCube;
-    public GameObject startGamePanel;
-    public GameObject enemyCapsule;
     public GameObject player;
 
-    public TMP_Text text;
+    // enemies prefabs
+    public GameObject enemyCube;
+    public GameObject enemyCapsule;
 
+    // Canvas objects
+    public TMP_Text text;
+    public GameObject startGamePanel;
     public Button startBtn;
     public Button restartBtn;
     public Button nextRoundBtn;
 
     public static bool defeat;
     public static int currentRound = 1;
+
+    // Coroutine queue
     public static Queue<IEnumerator> coroutineQueue = new Queue<IEnumerator>();
 
+    // Enemy speed movement
     public float enemySpeed;
 
-    // Виконати корутини в черзі
+    // Launching coroutines from queue
     private IEnumerator CoroutineDeQueue(float period, int round)
     {
         yield return new WaitForSeconds(1f);
@@ -42,17 +42,22 @@ public class EnemySpawner : MonoBehaviour
             }
             yield return StartCoroutine(coroutineQueue.Dequeue());
         }
+
         if (!defeat)
-            Utils.WinRound(text, nextRoundBtn, startGamePanel, player, restartBtn);
+            RoundExodus.WinRound(text, nextRoundBtn, startGamePanel, player, restartBtn);
     }
 
+    // Spawning enemies and moving them to the gates
     private IEnumerator CoroutineSpawnEnemy(float speed, GameObject prefab, float lifeDuration)
     {
         GameObject enemy = Instantiate(prefab, RanPos(), RanRot());
+
         enemy.AddComponent<CustomeComponent>();
 
         Vector3 target = new Vector3(Random.Range(1.5f, 8.5f), Random.Range(0.9f, 3f), -14.2f);
+
         Destroy(enemy, lifeDuration);
+
         while (enemy.GetComponent<CustomeComponent>().isCollide == false)
         {
             enemy.transform.position = Vector3.MoveTowards(enemy.transform.position, target, Time.deltaTime * speed);
@@ -63,7 +68,7 @@ public class EnemySpawner : MonoBehaviour
         if (defeat)
         {
             StopAllCoroutines();
-            Utils.LoseRound(text, restartBtn, startGamePanel, player);
+            RoundExodus.LoseRound(text, restartBtn, startGamePanel, player);
         }
     }
 
@@ -123,6 +128,7 @@ public class EnemySpawner : MonoBehaviour
         StartCoroutine(CoroutineDeQueue(0.3f, 3));
     }
 
+    // Randomizer for Instantiate()
     private Vector3 RanPos()
     {
         return new Vector3(Random.Range(-4f, 14f), Random.Range(1.5f, 3.5f), Random.Range(-6f, 4f));

@@ -4,10 +4,13 @@ using TMPro;
 
 public class BtnsClick : MonoBehaviour
 {
+    // Canvas objects
     public Button startBtn;
     public Button restartBtn;
     public Button nextRoundBtn;
+
     public GameObject startGamePanel;
+
     public TextMeshProUGUI text;
 
     public void FirstRound()
