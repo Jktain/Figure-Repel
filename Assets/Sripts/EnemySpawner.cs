@@ -47,7 +47,7 @@ public class EnemySpawner : MonoBehaviour
             RoundExodus.WinRound(text, nextRoundBtn, startGamePanel, player, restartBtn);
     }
 
-    // Spawning enemies and moving them to the gates
+    // Spawning enemies, adding to them field "isCollide" and making move to the random place in gates
     private IEnumerator CoroutineSpawnEnemy(float speed, GameObject prefab, float lifeDuration)
     {
         GameObject enemy = Instantiate(prefab, RanPos(), RanRot());
@@ -72,6 +72,7 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
+    // Starts one of the following rounds in order to current round
     public void StartRound()
     {
         player.gameObject.SetActive(true);
@@ -96,7 +97,7 @@ public class EnemySpawner : MonoBehaviour
 
         for (int i = 0; i < 4; i++)
         {
-            coroutineQueue.Enqueue(CoroutineSpawnEnemy(enemySpeed, enemyCube, 3f));
+            coroutineQueue.Enqueue(CoroutineSpawnEnemy(enemySpeed, enemyCube, 2.2f));
         }
 
         StartCoroutine(CoroutineDeQueue(1f, 1));
@@ -108,7 +109,7 @@ public class EnemySpawner : MonoBehaviour
 
         for (int i = 0; i < 4; i++)
         {
-            coroutineQueue.Enqueue(CoroutineSpawnEnemy(enemySpeed, enemyCube, 2.5f));
+            coroutineQueue.Enqueue(CoroutineSpawnEnemy(enemySpeed, enemyCube, 2f));
             coroutineQueue.Enqueue(CoroutineSpawnEnemy(enemySpeed * 1.3f, enemyCapsule, 1.8f));
         }
 
@@ -121,8 +122,8 @@ public class EnemySpawner : MonoBehaviour
 
         for (int i = 0; i < 4; i++)
         {
-            coroutineQueue.Enqueue(CoroutineSpawnEnemy(enemySpeed * 1.2f, enemyCube, 2.5f));
-            coroutineQueue.Enqueue(CoroutineSpawnEnemy(enemySpeed * 1.4f, enemyCapsule, 2.5f));
+            coroutineQueue.Enqueue(CoroutineSpawnEnemy(enemySpeed * 1.2f, enemyCube, 1.8f));
+            coroutineQueue.Enqueue(CoroutineSpawnEnemy(enemySpeed * 1.4f, enemyCapsule, 1.8f));
         }
 
         StartCoroutine(CoroutineDeQueue(0.3f, 3));

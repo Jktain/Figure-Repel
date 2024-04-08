@@ -8,6 +8,7 @@ public class CustomeComponent : MonoBehaviour
 
 public class Enemy : MonoBehaviour
 {
+    // Enemies behaviour when collising gates or player
     public void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Gates")
